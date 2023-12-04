@@ -11,23 +11,23 @@ export default function FormAddress() {
 
   const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const handleUpdateAddress = async () => {
+  const handleInsertAddress = async () => {
     try {
-        console.log("Dados a serem inseridos na tabela 'address':", {
-            postal_code: postalCode,
-            street,
-            number,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-          });
+      console.log("Dados a serem inseridos na tabela 'address':", {
+        postal_code: postalCode,
+        street,
+        number,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      });
       const { data, error } = await supabase
-        .from('address')
-        .upsert({
-            postal_code: postalCode,
-            street,
-            number,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
+        .from("address")
+        .insert({
+          postal_code: postalCode,
+          street,
+          number,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
         });
 
       if (error) {
@@ -36,7 +36,58 @@ export default function FormAddress() {
 
       console.log("Dados inseridos na tabela 'address':", data);
     } catch (error) {
-      console.error("Erro ao inserir dados na tabela 'address':");
+      console.error("Erro ao inserir dados na tabela 'address':", error);
+    }
+  };
+
+  const handleUpdateAddress = async () => {
+    try {
+      console.log("Dados a serem atualizados na tabela 'address':", {
+        postal_code: postalCode,
+        street,
+        number,
+        updated_at: new Date().toISOString(),
+      });
+      const { data, error } = await supabase
+        .from("address")
+        .update({
+          postal_code: postalCode,
+          street,
+          number,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("postal_code", postalCode);
+
+      if (error) {
+        throw error;
+      }
+
+      console.log("Dados atualizados na tabela 'address':", data);
+    } catch (error) {
+      console.error("Erro ao atualizar dados na tabela 'address':", error);
+    }
+  };
+
+  const handleDeleteAddress = async () => {
+    try {
+      console.log("Dados a serem excluidos na tabela 'address':", {
+        postal_code: postalCode,
+        street,
+        number,
+        updated_at: new Date().toISOString(),
+      });
+      const { data, error } = await supabase
+        .from("address")
+        .delete()
+        .eq("postal_code", postalCode);
+
+      if (error) {
+        throw error;
+      }
+
+      console.log("Dados excluidos na tabela 'address':", data);
+    } catch (error) {
+      console.error("Erro ao excluir dados na tabela 'address':", error);
     }
   };
 
@@ -80,9 +131,25 @@ export default function FormAddress() {
       </div>
       <button
         className="py-2 px-4 no-underline rounded-md bg-btn-background hover:bg-btn-background-hover"
+        onClick={handleInsertAddress}
+      >
+        Adicionar
+      </button>
+      <br />
+      <br />
+      <button
+        className="py-2 px-4 no-underline rounded-md bg-btn-background hover:bg-btn-background-hover"
         onClick={handleUpdateAddress}
       >
-        Adicionar 
+        Atualizar
+      </button>
+      <br />
+      <br />
+      <button
+        className="py-2 px-4 no-underline rounded-md bg-btn-background hover:bg-btn-background-hover"
+        onClick={handleDeleteAddress}
+      >
+        Excluir endereço
       </button>
     </div>
   );
