@@ -2,6 +2,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Avatar from "./avatar";
+import FormAdress from "../components/FormAdress"
 
 export default function AccountForm({ session }) {
   const supabase = createClientComponentClient();
@@ -120,6 +121,7 @@ export default function AccountForm({ session }) {
           {loading ? "Carregando ..." : "Atualizar"}
         </button>
       </div>
+      <FormAdress />
     </div>
   );
 }
